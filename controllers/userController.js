@@ -39,3 +39,9 @@ export function userLogin(req,res){
         }
     });
 }
+
+export function userDelete(req, res){
+    User.deleteOne({email: req.body.email}).then(()=>{
+        res.send("The user has been deleted.");
+    });
+}
