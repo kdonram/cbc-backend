@@ -19,16 +19,17 @@ export function getProduct(req,res){
     })
 }
 
-export function postProduct(req,res){
+export async function postProduct(req,res){
     let arr = [];
-    Product.find({name: req.body.name}).then((productList)=>{
-        productList.map((product)=>{
-            arr.push(product.name);
-        });
+    try {
+        const productList = await Product.find({name: req.body.name})
+        productList.map((product)=>
+            arr.push(product.name)
+        );
         res.send(arr);
-    }).catch((error)=>{
-        console.log(error);
-    })
+    } catch (error){
+        console.log("error");
+    }
 }
 
 // export function getProductByName(req,res){
