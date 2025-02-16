@@ -1,6 +1,9 @@
 import User from "../user.js";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export function createUser(req,res){
     const newUserData = req.body;
@@ -30,7 +33,7 @@ export function userLogin(req,res){
                     type: user.type,
                     profilePicture: user.profilePicture
 
-            }, "cbc-backend-private-key-15246");
+            }, process.env.SECRET);
             response.json({
                 message: "User logged in",
                 token: token
