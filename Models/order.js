@@ -49,3 +49,5 @@ const Order = mongoose.Schema({
         required: true
     }
 })
+
+export default Order;
