@@ -15,3 +15,13 @@ export function createProduct(req,res){
         })
     }
 }
+
+export function getProduct(req,res){
+    Product.find().then((list)=>{
+        res.json(list);
+    })
+}
+
+export function deleteProduct(req,res){
+
+}
