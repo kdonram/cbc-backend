@@ -1,4 +1,4 @@
-import User from "../../Models/user.js";
+import User from "../Models/user.js";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
@@ -6,7 +6,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export function createUser(req,res){
+
     const newUserData = req.body;
+    if (newUserData.type == "admin"){
+        if (req.user == null) {
+            res.send("Please login as admin to create an admin account.");
+            return;
+        }
+
+        if(req.user.type != "admin"){
+            res.send("Please login as admin to create an admin account.");
+            return;
+        }
+    }
+    
     newUserData.password = bcrypt.hashSync(newUserData.password, 10);
     const user = new User(newUserData);
     user.save().then(()=>{
@@ -34,7 +47,7 @@ export function userLogin(req,res){
                     profilePicture: user.profilePicture
 
             }, process.env.SECRET);
-            response.json({
+            res.json({
                 message: "User logged in",
                 token: token
             })   
