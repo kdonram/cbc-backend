@@ -55,3 +55,14 @@ export function userLogin(req,res){
         }
     });
 }
+
+export function isAdmin(req){
+    if (req.user == null){
+        return false;
+    }
+    if (req.usser.type == "customer"){
+        return false;
+    }
+
+    return true;
+}
