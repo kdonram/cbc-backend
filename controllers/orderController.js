@@ -20,7 +20,7 @@ export async function createOrder(req,res){
             orderId = "CBC0001";
         } else {
             const currentOrderId = latestOrder[0].orderId;
-            const number = currentOrderId.replace("CBC","");
+            let number = currentOrderId.replace("CBC","");
             number = (parseInt(number, 10) + 1).toString().padStart(4, "0");
 
             orderId = "CBC" + number;
@@ -44,4 +44,14 @@ export async function createOrder(req,res){
             message: error.message
         })
     }
+}
+
+export function getOrders(req,res){
+    Order.find().then((orderList)=>{
+        res.json(orderList);
+    }).catch((e)=>{
+        res.json({
+            message: e
+        })
+    })
 }
