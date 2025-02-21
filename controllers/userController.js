@@ -66,3 +66,10 @@ export function isAdmin(req){
 
     return true;
 }
+
+export function isCustomer(req){
+    if (req.user == null){
+        return true;
+    } 
+    return false;
+}
