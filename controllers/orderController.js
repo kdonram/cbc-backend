@@ -39,7 +39,7 @@ export async function createOrder(req,res){
             name: result.productName,
             price: result.price,
             image: result.images[0],
-            quantity: req.body.orderedItem?.[0]?.quantity || "1"
+            quantity: req.body.quantity
         });
         
         newOrderData.orderId = orderId;
