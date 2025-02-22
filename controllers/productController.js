@@ -35,7 +35,7 @@ export async function deleteProduct(req,res){
     }
 }
 
-export function whichProduct(req){
-    const result = Product.findOne({productId: req.body.productId});
+export function whichProduct(id){
+    const result = Product.findOne({productId: id});
     return result;
 }

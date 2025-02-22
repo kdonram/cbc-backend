@@ -27,20 +27,25 @@ export async function createOrder(req,res){
             orderId = "CBC" + number;
         }
 
-        const result = await whichProduct(req);
-        if (!result) {
-            return res.status(400).json({ message: "Invalid product selection." });
-        }
-
         const newOrderData = req.body;
-        newOrderData.orderedItem = [];
 
-        newOrderData.orderedItem.push({
-            name: result.productName,
-            price: result.price,
-            image: result.images[0],
-            quantity: req.body.quantity
-        });
+        const orderArray = newOrderData.orderedItem;
+        const len = orderArray.length;
+        
+        
+        for (let i = 0; i < len; i++){
+            let ar = orderArray[i]
+            const result = await whichProduct(ar.id);
+            if (!result) {
+                return res.status(400).json({ message: "Invalid product selection." });
+            }
+
+            delete ar.id;
+            ar.name = result.productName
+            ar.price = result.price
+            ar.image = result.images[0]
+
+        }
         
         newOrderData.orderId = orderId;
         newOrderData.email = req.user.email;
