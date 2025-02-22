@@ -22,6 +22,20 @@ export function getProduct(req,res){
     })
 }
 
-export function deleteProduct(req,res){
+export async function deleteProduct(req,res){
+    const result = await Product.deleteOne({productId: req.body.productId});
+    if (result.deletedCount === 1){
+        res.json({
+            message: "Product has been deleted."
+        });
+    } else {
+        res.json({
+            message: "There is no such product."
+        })
+    }
+}
 
+export function whichProduct(req){
+    const result = Product.findOne({productId: req.body.productId});
+    return result;
 }

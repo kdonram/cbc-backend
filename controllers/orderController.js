@@ -1,5 +1,6 @@
-import Order from '../Models/order.js'
+import Order from '../Models/order.js';
 import { isCustomer } from './userController.js';
+import { whichProduct } from './productController.js';
 
 export async function createOrder(req,res){
 
@@ -26,7 +27,21 @@ export async function createOrder(req,res){
             orderId = "CBC" + number;
         }
 
+        const result = await whichProduct(req);
+        if (!result) {
+            return res.status(400).json({ message: "Invalid product selection." });
+        }
+
         const newOrderData = req.body;
+        newOrderData.orderedItem = [];
+
+        newOrderData.orderedItem.push({
+            name: result.productName,
+            price: result.price,
+            image: result.images[0],
+            quantity: req.body.orderedItem?.[0]?.quantity || "1"
+        });
+        
         newOrderData.orderId = orderId;
         newOrderData.email = req.user.email;
 
@@ -55,3 +70,4 @@ export function getOrders(req,res){
         })
     })
 }
+
