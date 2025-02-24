@@ -35,7 +35,11 @@ export async function deleteProduct(req,res){
     }
 }
 
-export function whichProduct(id){
+export async function whichProduct(id){
     const result = Product.findOne({productId: id});
+    await Product.updateOne(
+        { productId : id },
+        { $set: { quantity } }
+    )
     return result;
 }
