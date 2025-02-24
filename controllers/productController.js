@@ -35,11 +35,15 @@ export async function deleteProduct(req,res){
     }
 }
 
-export async function whichProduct(id){
-    const result = Product.findOne({productId: id});
+export async function whichProduct(id,quant){
+    const result = await Product.findOne({productId: id});
+    const newQuantity = reducingQ(result.quantity,quant)
     await Product.updateOne(
         { productId : id },
-        { $set: { quantity } }
+        { $set: { quantity : newQuantity } }
     )
     return result;
+}
+function reducingQ(rq,q){
+    return Math.max(0, Number(rq) - Number(q));
 }

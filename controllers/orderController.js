@@ -35,7 +35,7 @@ export async function createOrder(req,res){
         
         for (let i = 0; i < len; i++){
             let ar = orderArray[i]
-            const result = await whichProduct(ar.id);
+            const result = await whichProduct(ar.id,ar.quantity);
             if (!result) {
                 return res.status(400).json({ message: "Invalid product selection." });
             }
