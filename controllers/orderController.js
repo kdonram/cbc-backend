@@ -1,6 +1,6 @@
 import Order from '../Models/order.js';
 import { isCustomer } from './userController.js';
-import { whichProduct } from './productController.js';
+import { whichProduct,checkQuantity,newQ } from './productController.js';
 
 export async function createOrder(req,res){
 
@@ -32,13 +32,25 @@ export async function createOrder(req,res){
         const orderArray = newOrderData.orderedItem;
         const len = orderArray.length;
         
-        
         for (let i = 0; i < len; i++){
             let ar = orderArray[i]
-            const result = await whichProduct(ar.id,ar.quantity);
+            const result = await whichProduct(ar.id);
+
             if (!result) {
                 return res.status(400).json({ message: "Invalid product selection." });
             }
+            
+            const ans = await checkQuantity(result,ar.quantity);
+            if (!ans){
+                return res.status(400).json({ message: `${result.productName} has no enough quantity.`});
+            }
+        }
+        
+        for (let i = 0; i < len; i++){
+            let ar = orderArray[i]
+            const result = await whichProduct(ar.id);
+            
+            await newQ(ar.id,result,ar.quantity);
 
             delete ar.id;
             ar.name = result.productName
@@ -57,7 +69,7 @@ export async function createOrder(req,res){
         res.json({
             message: "Order Created."
         })
-        
+    
 
     } catch(error){
         res.status(500).json({

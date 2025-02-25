@@ -35,15 +35,31 @@ export async function deleteProduct(req,res){
     }
 }
 
-export async function whichProduct(id,quant){
+export async function whichProduct(id){
     const result = await Product.findOne({productId: id});
+    return result;
+}
+
+export async function newQ(id,result,quant){
     const newQuantity = reducingQ(result.quantity,quant)
     await Product.updateOne(
         { productId : id },
         { $set: { quantity : newQuantity } }
     )
-    return result;
 }
+
+export async function checkQuantity(result, quant) {
+    const availableQuantity = Number(result.quantity);
+    const requestedQuantity = Number(quant);
+
+    if (requestedQuantity > availableQuantity) {
+        return null;
+    }
+    return true;
+}
+
 function reducingQ(rq,q){
-    return Math.max(0, Number(rq) - Number(q));
+    const currQ = Math.max(0, Number(rq) - Number(q));
+    return currQ;
 }
+
